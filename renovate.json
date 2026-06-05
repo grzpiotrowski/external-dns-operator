@@ -1,6 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "enabledManagers": ["dockerfile", "tekton"],
+  "enabledManagers": ["dockerfile", "tekton", "regex"],
   "packageRules": [
     {
       "description": "Disable all Dockerfile updates by default. Only specific files will get targeted.",
@@ -36,6 +36,20 @@
       "enabled": true,
       "versioning": "redhat",
       "allowedVersions": "/^1\\.25(\\.|$)/",
+      "schedule": [
+        "after 5am on tuesday"
+      ]
+    }
+  ],
+  "regexManagers": [
+    {
+      "description": "Update kube-rbac-proxy image digest in bundle-hack/container_digest.sh",
+      "fileMatch": ["^bundle-hack/container_digest\\.sh$"],
+      "matchStrings": [
+        "export KUBE_RBAC_PROXY_IMAGE_PULLSPEC='(?<depName>registry\\.redhat\\.io/openshift4/ose-kube-rbac-proxy-rhel9)@(?<currentDigest>sha256:[a-f0-9]+)'"
+      ],
+      "datasourceTemplate": "docker",
+      "versioningTemplate": "docker",
       "schedule": [
         "after 5am on tuesday"
       ]
