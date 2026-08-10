@@ -1,7 +1,61 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "enabledManagers": ["dockerfile", "tekton"],
+  "enabledManagers": ["dockerfile", "gomod", "tekton"],
+  "postUpdateOptions": ["gomodTidy"],
   "packageRules": [
+    {
+      "description": "Group Kubernetes ecosystem dependencies to avoid version skew",
+      "matchManagers": ["gomod"],
+      "matchPackageNames": [
+        "k8s.io/{/,}**",
+        "sigs.k8s.io/{/,}**"
+      ],
+      "groupName": "k8s.io dependencies",
+      "schedule": [
+        "after 5am on tuesday"
+      ]
+    },
+    {
+      "description": "Group OpenShift dependencies",
+      "matchManagers": ["gomod"],
+      "matchPackageNames": [
+        "github.com/openshift/{/,}**"
+      ],
+      "groupName": "openshift dependencies",
+      "schedule": [
+        "after 5am on tuesday"
+      ]
+    },
+    {
+      "description": "Group AWS SDK v2 dependencies",
+      "matchManagers": ["gomod"],
+      "matchPackageNames": [
+        "github.com/aws/aws-sdk-go-v2{/,}**"
+      ],
+      "groupName": "aws-sdk-go-v2",
+      "schedule": [
+        "after 5am on tuesday"
+      ]
+    },
+    {
+      "description": "Group Azure dependencies",
+      "matchManagers": ["gomod"],
+      "matchPackageNames": [
+        "github.com/Azure/{/,}**"
+      ],
+      "groupName": "azure dependencies",
+      "schedule": [
+        "after 5am on tuesday"
+      ]
+    },
+    {
+      "description": "Pin infoblox-go-client to v1 major version",
+      "matchManagers": ["gomod"],
+      "matchPackageNames": [
+        "github.com/infobloxopen/infoblox-go-client"
+      ],
+      "allowedVersions": "<2.0.0"
+    },
     {
       "description": "Disable all Dockerfile updates by default. Only specific files will get targeted.",
       "matchManagers": ["dockerfile"],
